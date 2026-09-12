@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NPSS Bot - National Pest Surveillance System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f4f7f2 0%, #e8f5e9 100%);
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 5px;
+        }
+
+        header h3 {
+            font-size: 1.2em;
+            font-weight: 300;
+        }
+
+        nav {
+            background: #2e7d32;
+            padding: 12px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            font-weight: bold;
+            transition: 0.3s;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+
+        nav a:hover {
+            background: #1b5e20;
+            transform: translateY(-2px);
+        }
+
+        .hero {
+            padding: 40px 30px;
+            text-align: center;
+            background: rgba(255,255,255,0.7);
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .hero h2 {
+            color: #1b5e20;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .hero p {
+            color: #555;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            margin: 20px;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .card h2 {
+            color: #1b5e20;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #2e7d32;
+            padding-bottom: 10px;
+        }
+
+        .card h3 {
+            color: #2e7d32;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        .card ul {
+            list-style-position: inside;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .card li {
+            margin: 8px 0;
+            padding-left: 10px;
+        }
+
+        .chat-box {
+            height: 350px;
+            overflow-y: auto;
+            border: 2px solid #2e7d32;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .bot-message {
+            background: #e8f5e9;
+            border-left: 4px solid #2e7d32;
+            color: #1b5e20;
+        }
+
+        .user-message {
+            background: #c8e6c9;
+            border-left: 4px solid #1b5e20;
+            color: #1b5e20;
+            margin-left: 20px;
+        }
+
+        .chat-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #2e7d32;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #1b5e20;
+            background: #f0f8f5;
+        }
+
+        button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(27, 94, 32, 0.4);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        footer {
+            background: #1b5e20;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            font-size: 0.9em;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                margin: 15px 10px;
+                padding: 15px;
+            }
+
+            nav a {
+                margin: 0 10px;
+                font-size: 0.9em;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .chat-input-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🌾 NPSS Bot</h1>
+        <h3>National Pest Surveillance System</h3>
+        <p>Smart Agricultural & Horticulture Assistant</p>
+    </header>
+
+    <nav>
+        <a href="#" onclick="showSection('home')">🏠 Home</a>
+        <a href="#" onclick="showSection('chat')">💬 NPSS Bot</a>
+        <a href="#" onclick="showSection('horticulture')">🌻 Horticulture</a>
+        <a href="#" onclick="showSection('about')">ℹ️ About</a>
+    </nav>
+
+    <div class="container">
+
+        <!-- Home Section -->
+        <section class="section active" id="home">
+            <div class="hero">
+                <h2>🌱 Welcome to NPSS Bot</h2>
+                <p>
+                    Helping Farmers with Pest Identification, Crop Advisory, Horticulture Knowledge, Government Schemes and Weather Alerts.
+                </p>
+                <p style="margin-top: 15px; color: #2e7d32; font-weight: bold;">
+                    Click on "💬 NPSS Bot" to start chatting!
+                </p>
+            </div>
+        </section>
+
+        <!-- Chat Section -->
+        <section class="section" id="chat">
+            <div class="card">
+                <h2>💬 NPSS Chat Assistant</h2>
+                <p style="color: #666; margin-bottom: 15px;">Ask about pests, crops, horticulture, or farming practices.</p>
+
+                <div class="chat-box" id="chatBox">
+                    <div class="message bot-message">
+                        <b>🤖 NPSS Bot:</b> नमस्ते! मैं NPSS Bot हूँ। आप मुझसे कीटों, फसलों, बागवानी या कृषि के बारे में कोई भी प्रश्न पूछ सकते हैं। 🌾
+                    </div>
+                </div>
+
+                <div class="chat-input-group">
+                    <input type="text" id="userInput" placeholder="अपना सवाल पूछें... / Ask your question...">
+                    <button onclick="sendMessage()">भेजें / Send</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Horticulture Section -->
+        <section class="section" id="horticulture">
+            <div class="card">
+                <h2>🌻 Horticulture Crops Information</h2>
+
+                <h3>🍎 Fruit Crops (फल की फसलें)</h3>
+                <ul>
+                    <li>Mango (आम) - गर्मियों की सबसे अच्छी फसल</li>
+                    <li>Guava (अमरूद) - सस्ती और पौष्टिक</li>
+                    <li>Pomegranate (अनार) - उच्च कीमत में मिलता है</li>
+                    <li>Banana (केला) - साल भर उपज</li>
+                    <li>Papaya (पपीता) - तेजी से बढ़ता है</li>
+                    <li>Citrus (नींबू, किन्नू, संतरा) - विटामिन C का स्रोत</li>
+                    <li>Grapes (अंगूर) - निर्यात योग्य</li>
+                </ul>
+
+                <h3>🥬 Vegetable Crops (सब्जी की फसलें)</h3>
+                <ul>
+                    <li>Tomato (टमाटर) - सबसे आम सब्जी</li>
+                    <li>Potato (आलू) - संरक्षण के लिए अच्छा</li>
+                    <li>Onion (प्याज) - लंबे समय तक रखी जा सकती है</li>
+                    <li>Brinjal (बैंगन) - स्थानीय बाजार में लोकप्रिय</li>
+                    <li>Chilli (मिर्च) - मसालों की फसल</li>
+                    <li>Cabbage (पत्तागोभी) - सर्दियों की फसल</li>
+                    <li>Cauliflower (फूलगोभी) - विदेशों में निर्यात होती है</li>
+                </ul>
+
+                <h3>🌹 Flower Crops (फूलों की फसलें)</h3>
+                <ul>
+                    <li>Rose (गुलाब) - सबसे महंगा फूल</li>
+                    <li>Marigold (गेंदा) - त्योहारों में मांग</li>
+                    <li>Jasmine (चमेली) - सुगंधित फूल</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="section" id="about">
+            <div class="card">
+                <h2>ℹ️ About NPSS</h2>
+
+                <p>
+                    <b>NPSS (National Pest Surveillance System)</b> एक डिजिटल प्लेटफॉर्म है जो किसानों को कीट निगरानी, फसल सलाह, बागवानी जानकारी और कृषि मार्गदर्शन प्रदान करता है।
+                </p>
+
+                <h3>🎯 हमारी सेवाएं:</h3>
+                <ul>
+                    <li>✅ कीट पहचान और रोकथाम</li>
+                    <li>✅ फसल सलाह और प्रबंधन</li>
+                    <li>✅ बागवानी की जानकारी</li>
+                    <li>✅ मौसम संबंधी सूचनाएं</li>
+                    <li>✅ सरकारी योजनाओं की जानकारी</li>
+                    <li>✅ 24/7 चैट सहायता</li>
+                </ul>
+
+                <h3 style="margin-top: 20px;">👨‍💻 Project Credit:</h3>
+                <p>
+                    <b>Mohd Ashif</b><br>
+                    Scout Horticulture, Palwal<br>
+                    📱 Smart Agricultural Assistant Developer
+                </p>
+
+                <h3 style="margin-top: 20px;">🔗 Follow Us:</h3>
+                <p>
+                    GitHub: <a href="https://github.com/mohdashif6995" target="_blank" style="color: #2e7d32; text-decoration: none;">mohdashif6995</a>
+                </p>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        © 2026 NPSS Bot | National Pest Surveillance System | Developed with ❤️ for Farmers
+    </footer>
+
+    <script>
+        // Bot Knowledge Base
+        const botResponses = {
+            "मिर्च": "मिर्च की फसल के लिए:\n✓ बीज दर: 500-750 ग्राम प्रति हेक्टेयर\n✓ दूरी: 45×45 सेमी\n✓ सिंचाई: गर्मी में 7-10 दिन का अंतराल\n✓ कीट: थ्रिप्स, पत्ती धब्बा रोग\n✓ नियंत्रण: ट्राइकोडर्मा का छिड़काव करें",
+            
+            "टमाटर": "टमाटर की खेती के लिए:\n✓ तापमान: 25-30°C उपयुक्त है\n✓ मिट्टी: दोमट या बलुई दोमट\n✓ बीज दर: 400-500 ग्राम प्रति हेक्टेयर\n✓ फसल अवधि: 90-100 दिन\n✓ मुख्य रोग: पत्ती धब्बा, फल विगलन\n✓ उपज: 30-40 टन प्रति हेक्टेयर",
+            
+            "आम": "आम की बागवानी के लिए:\n✓ जलवायु: उष्ण और आर्द्र\n✓ मिट्टी: दोमट या बलुई दोमट\n✓ रोपण: जुलाई-अगस्त\n✓ दूरी: 12×12 मीटर\n✓ कीट: फल मक्खी, तने की बोरर\n✓ समर्थन: नियमित कटाई-छटाई आवश्यक",
+            
+            "कीट": "कीट नियंत्रण के तरीके:\n1️⃣ जैविक नियंत्रण: लाभकारी कीटों का उपयोग\n2️⃣ रासायनिक: कीटनाशक का सही समय पर छिड़काव\n3️⃣ यांत्रिक: हाथ से हटाना\n4️⃣ सांस्कृतिक: खेत की सफाई\n5️⃣ रोकथाम: स्वस्थ बीज बोएं\n\n⚠️ हमेशा निर्देशों का पालन करें!",
+            
+            "सिंचाई": "सिंचाई की जानकारी:\n✓ ग्रीष्मकाल: 7-10 दिन का अंतराल\n✓ सर्दी: 20-25 दिन का अंतराल\n✓ वर्षा: मौसम पर निर्भर\n✓ मिट्टी जांच: नमी की जांच करें\n✓ जलभराव से बचें: पौधे मर सकते हैं\n\n💡 सुबह या शाम को सिंचाई करें",
+            
+            "खाद": "खाद और पोषण:\n🌾 गोबर की खाद: 20-25 टन/हेक्टेयर\n🌾 नीम केक: 1 टन/हेक्टेयर\n🌾 जैव खाद: एजोस्पाइरम, फॉस्फोबैक्टीरिया\n🌾 रासायनिक खाद: मिट्टी परीक्षण के अनुसार\n🌾 पत्तियों पर छिड़काव: 2% यूरिया\n\n⚠️ अधिक खाद से नुकसान हो सकता है",
+            
+            "आलू": "आलू की खेती:\n✓ बीज दर: 25-30 किवंटल/हेक्टेयर\n✓ दूरी: 20×10 सेमी\n✓ तापमान: 15-25°C\n✓ फसल अवधि: 90-120 दिन\n✓ कीट: सफेद मक्खी, थ्रिप्स\n✓ उपज: 20-25 टन/हेक्टेयर",
+            
+            "फूल": "फूलों की बागवानी:\n🌹 गुलाब: गर्मी के लिए उपयुक्त, नियमित काटाई\n🌼 गेंदा: सरल खेती, तेजी से बढ़ता है\n🌺 चमेली: सुगंधित, छाया-सहिष्णु\n\n✓ मिट्टी: अच्छी जल निक���सी वाली\n✓ प्रकाश: 6-8 घंटे आवश्यक\n✓ देखभाल: नियमित कटाई से उपज बढ़ती है",
+            
+            "बीज": "बीज संरक्षण:\n✓ सूखी जगह पर रखें\n✓ नमी मुक्त कंटेनर में संरक्षित करें\n✓ तापमान: 10-15°C में स्टोर करें\n✓ बीज परीक्षण: अंकुरण % जांचें\n✓ अवधि: ज्यादातर 1-2 साल की होती है\n✓ स्वस्थ बीज = स्वस्थ फसल",
+            
+            "वर्षा": "वर्षा के दौरान खेती:\n☔ जलभराव से बचाव आवश्यक\n☔ नाली की व्यवस्था करें\n☔ बीमारियों के लिए सतर्क रहें\n☔ फंगल रोग के नियंत्रण के लिए बोर्डो मिश्रण (1%) का छिड़काव करें\n☔ पत्तियों पर पानी न रहे इसका ध्यान रखें",
+            
+            "मिट्टी": "मिट्टी की तैयारी:\n✓ मिट्टी परीक्षण: हर 3 साल में करें\n✓ गहरी खुदाई: 25-30 सेमी\n✓ जैव खाद: 5-6 टन/हेक्टेयर मिलाएं\n✓ मेड़ें: 15-20 सेमी ऊंची\n✓ समतलीकरण: उचित जल निकास के लिए\n✓ pH स्तर: 6.5-7.5 उपयुक्त है",
+            
+            "नमस्ते": "नमस्ते! 👋 मैं NPSS Bot हूँ। आप मुझसे निम्न बारे में पूछ सकते हैं:\n🌾 फसलों की जानकारी\n🐛 कीट नियंत्रण\n💧 सिंचाई और पानी प्रबंधन\n🌻 बागवानी फसलें\n🌱 मिट्टी की तैयारी\n📊 बीज और पौध प्रबंधन",
+            
+            "hello": "Hello! 👋 I'm NPSS Bot. You can ask me about:\n🌾 Crops and farming\n🐛 Pest management\n💧 Irrigation\n🌻 Horticulture\n🌱 Soil preparation\n📊 Seeds and nursery management",
+            
+            "thanks": "आपका स्वागत है! 😊 यदि कोई और सवाल हो तो बेझिझक पूछें। 🌾",
+            
+            "धन्यवाद": "आपका स्वागत है! 😊 यदि कोई और सवाल हो तो बेझिझक पूछें। 🌾"
+        };
+
+        function sendMessage() {
+            let input = document.getElementById("userInput");
+            let text = input.value.trim();
+            
+            if (text === "") return;
+
+            let chat = document.getElementById("chatBox");
+
+            // Add user message
+            let userMsg = document.createElement("div");
+            userMsg.className = "message user-message";
+            userMsg.innerHTML = "<b>👤 आप:</b> " + text;
+            chat.appendChild(userMsg);
+
+            // Get bot response
+            let botMsg = document.createElement("div");
+            botMsg.className = "message bot-message";
+            
+            let response = getBotResponse(text);
+            botMsg.innerHTML = "<b>🤖 NPSS Bot:</b> " + response;
+            chat.appendChild(botMsg);
+
+            // Clear input
+            input.value = "";
+
+            // Scroll to bottom
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function getBotResponse(userInput) {
+            userInput = userInput.toLowerCase();
+
+            // Check for keywords
+            for (let key in botResponses) {
+                if (userInput.includes(key.toLowerCase())) {
+                    return botResponses[key];
+                }
+            }
+
+            // Default response
+            return "🤔 मुझे आपके प्रश्न का सीधा उत्तर नहीं मिला। कृपया निम्नलिखित विषयों के बारे में पूछें:\n\n📌 मिर्च, टमाटर, आम, आलू, कीट, सिंचाई, खाद, फूल, बीज, मिट्टी, वर्षा\n\n💡 या तो अपनी फसल का नाम या समस्या का विवरण दें।";
+        }
+
+        function showSection(sectionId) {
+            // Hide all sections
+            let sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Allow Enter key to send message
+        document.getElementById("userInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
+    </script>
+
+</body>
+</html>
